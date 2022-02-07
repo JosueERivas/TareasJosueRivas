@@ -13,7 +13,6 @@ int main()
     int ingreso=0;
     int resultados=0;
     int cursos=0;
-    char nombresCursos;
 
 
     //Ingreso cantidad de cursos
@@ -39,6 +38,27 @@ int main()
 
 
         //Mostrando Resultados
+        while(resultados<cursos)
+        {
+            cout << nombreCurso[resultados] << ": " << notaCurso[resultados] << " ";
+            if(notaCurso[resultados]>79)
+            {
+                cout << "Has aprobado con excelente nota." << endl;
+            }else if(notaCurso[resultados]>60)
+            {
+                cout << "Has aprobado, raspado pero aprobado." << endl;
+            }else if(notaCurso[resultados]==60)
+            {
+                cout << "Casi pero no, reprobado." << endl;
+            }else if(notaCurso[resultados]>30)
+            {
+                cout << "Lo siento, has sido reprobado." << endl;
+            }else
+            {
+                cout << "Esto no es lo tuyo, Reprobado." << endl;
+            }
+            resultados=resultados+1;
+        }
     }
 
 
