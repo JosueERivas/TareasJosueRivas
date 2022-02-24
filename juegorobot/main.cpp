@@ -1,69 +1,175 @@
 #include <iostream>
+#include <fstream>
+#include <string>
 using namespace std;
-void drawMap(int posX,int posY,char gameMap[5][5]){
-  for(int i=0;i<5;i++){
-    for(int j=0;j<5;j++){
-      if(posX==j && posY==i)
-        {
-            cout<<"R";
-        }
-      else
-      {
-            cout<<gameMap[i][j];
-      }
-    }
-    cout<<endl;
-  }
-}
-int main(){
-  int posX=3;
-  int posY=3;
-  char map[5][5]={{'0','0','0','0','0'},
-		  {'0','0','0','0','0'},
-		  {'0','0','0','0','0'},
-		  {'0','0','0','0','0'},
-		  {'0','0','0','0','0'}};
-  char teclado;
-  bool gameOver= false;
-  drawMap(posX,posY,map);
-  while(!gameOver)
-  {
-    cout << "Bienvenido(a)"  << endl;
-    cout << "Controles Teclas --> w(arriba), a(izquierda), d(derecha) y s(abajo)" << endl;
-    cout << "Controles Teclas --> p(Salida)" << endl;
-    cin >> teclado;
-    switch (teclado)
+
+
+
+
+void SaveFile(string Nombre, char GameMap[10][10])
+{
+    ofstream FileMap("Mapa.txt"); // abre el archivo
+    if(FileMap.is_open())
     {
-        case 'a':
-            if (posX>0)
+        FileMap << Nombre << endl;
+        for(int i = 0; i < 10; i++)
+        {
+            for(int j = 0; j < 10; j++)
             {
-                posX-=1;
+               FileMap << GameMap[i][j];
             }
-            break;
-        case 'd':
-            if (posX<4)
-                {
-                posX+=1;
-            }
-            break;
-        case 'w':
-            if (posY>0)
-            {
-                posY-=1;
-            }
-            break;
-        case 's':
-            if (posY<4)
-            {
-                posY+=1;
-            }
-            break;
-        case 'p':
-            gameOver=true;
-        default:
-            break;
+            FileMap << endl;
+        }
     }
-  drawMap(posX,posY,map);
-  }
- return 0;
+
+    FileMap.close(); // cierra el archivo
+}
+void DrawMap(int HeroPosX, int HeroPosY, char GameMap[10][10])
+{
+    GameMap[HeroPosX][HeroPosY] = 'R';
+    for(int i = 0; i < 10; i++)
+    {
+        for(int j = 0; j < 10; j++)
+        {
+            if (GameMap[i][j] == 'R' )
+            {
+
+                if ( i != HeroPosX || j != HeroPosY )
+                {
+                    GameMap[i][j] = '0';
+                }
+
+            }
+            cout << GameMap[i][j];
+        }
+        cout << endl;
+    }
+}
+int PosicionRobot(char eje, char GameMap[10][10])
+{
+    int posicion=0;
+    for(int i = 0; i < 10; i++)
+    {
+        for(int j = 0; j < 10; j++)
+        {
+            if(GameMap[i][j] == 'R' && eje == 'x')
+            {
+                posicion = i;
+            }
+            else
+            if(GameMap[i][j] == 'R' && eje == 'y')
+            {
+                posicion = j;
+            }
+        }
+    }
+    return posicion;
+}
+
+string OpenFile(char GameMap[10][10])
+{
+    ifstream FileMap("Mapa.txt"); // abre el archivo
+    string line;
+    string name="No encontre nombre";
+    int renglon = 0;
+    int row = 0;
+    if(FileMap.is_open())
+    {
+        while(getline(FileMap, line))
+        {
+            if(renglon == 0)
+            {
+                name = line; // Obtiene el nombre de jugador
+            }
+            else
+            {
+                for(int i = 0; i < 10; i++)
+                {
+                        GameMap[row][i] = line[i];
+                }
+                row++;
+            }
+            renglon++;
+        }
+
+        FileMap.close();
+    }
+    else
+    {
+        cout << "Error. No se pudo abrir el archivo." << endl;
+    }
+    return name;
+}
+
+int main()
+{
+    int jugadas=0;
+    int HeroPosX=0;
+    int HeroPosY=0;
+    bool isGameOver = false;
+    char Input = ' ';
+    char GameMap[10][10];
+    string NamePlayer;
+    cout << "Ingrese su nombre: ";
+    cin >> NamePlayer;
+    // Obtiene el nombre del jugador
+    NamePlayer = OpenFile(GameMap);
+    cout << "Bienvenido/a " << NamePlayer << endl;
+    // Obtiene la posición almacenada del robot en la coordenada X
+    HeroPosX = PosicionRobot('x', GameMap);
+    // Obtiene la posición almacenada del robot en la coordenada Y
+    HeroPosY = PosicionRobot('y', GameMap);
+    // dibuja o despliega el mapa asignado a la matriz
+    DrawMap(HeroPosX, HeroPosY, GameMap);
+
+    while(isGameOver == false)
+    {
+        cout << "Controles Teclas --> w(arriba), a(izquierda), d(derecha) y s(abajo)" << endl;
+        cout << "Controles Teclas --> p(Salida)" << endl;
+        cin >> Input;
+
+        switch (Input)
+        {
+            case 'd':
+                if(HeroPosY < 8)
+                {
+                    HeroPosY++;
+                    jugadas++;
+                }
+                break;
+            case 'a':
+                if(HeroPosY > 1)
+                {
+                    HeroPosY--;
+                    jugadas++;
+                }
+                break;
+            case 'w':
+                if(HeroPosX > 1)
+                {
+                   HeroPosX--;
+                    jugadas++;
+                }
+                break;
+            case 's':
+                if(HeroPosX < 8)
+                {
+                    HeroPosX++;
+                    jugadas++;
+                }
+                break;
+            case 'p':
+                isGameOver = true;
+                break;
+            default:
+                cout << "Tecla Invalida" << endl;
+                break;
+        }
+        DrawMap(HeroPosX, HeroPosY, GameMap);
+    }
+    cout << "Cantidad de jugadas: " << jugadas << endl;
+    // Grabar los datos temporales en la matriz y los envia al archivo en disco
+    SaveFile(NamePlayer, GameMap);
+
+    return 0;
 }
