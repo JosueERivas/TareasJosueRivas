@@ -1,7 +1,0 @@
-# depslib dependency file v1.0
-1644899034 source:c:\users\user\onedrive\documentos\mariano\proyectosprograi\tareasjosuerivas\calculadora\calculadorajosuerivas\main.cpp
-	<iostream>
-	<wchar.h>
-	<locale.h>
-	<stdlib.h>
-
