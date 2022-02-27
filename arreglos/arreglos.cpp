@@ -3,7 +3,7 @@
 using namespace std;
 
 //funciones
-//muestra los valores de las celdas
+//muestra los valores de las posiciones
 void PrintCell(float Cells[], int index)
 {
     cout << Cells[index] << endl;
