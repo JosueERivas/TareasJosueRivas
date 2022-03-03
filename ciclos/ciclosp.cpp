@@ -4,7 +4,7 @@ using namespace std;
 
 int main()
 {
-    //contador hasta 99
+    //contador hasta 100
     int Counter = 0;
 
     while(Counter < 100)
