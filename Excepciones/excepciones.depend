@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1653880392 source:c:\users\user\onedrive\documentos\mariano\proyectosprograi\tareasjosuerivas\excepciones\main.cpp
+	<iostream>
+	"DivideByZeroException.h"
+
+1653879944 c:\users\user\onedrive\documentos\mariano\proyectosprograi\tareasjosuerivas\excepciones\dividebyzeroexception.h
+	<stdexcept>
+
